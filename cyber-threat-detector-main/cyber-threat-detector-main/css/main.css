@@ -1,0 +1,603 @@
+/* ==========================================================================
+   AI CYBER THREAT DETECTION PORTAL - CORE DESIGN SYSTEM
+   Cyberpunk SOC HUD Dark Aesthetic with Neon Accents & Glassmorphism
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;600;700&display=swap');
+
+:root {
+  /* Color Palette - High-Tech SOC Theme */
+  --bg-primary: #06090f;
+  --bg-secondary: #0c121e;
+  --bg-card: rgba(14, 22, 36, 0.75);
+  --bg-card-hover: rgba(20, 32, 52, 0.85);
+  --bg-glass: rgba(10, 16, 28, 0.65);
+  --bg-input: #080d16;
+  
+  /* Cyber Accent Colors */
+  --neon-cyan: #00ffcc;
+  --neon-cyan-glow: rgba(0, 255, 204, 0.35);
+  --neon-cyan-dim: rgba(0, 255, 204, 0.12);
+  
+  --electric-blue: #00a8ff;
+  --electric-blue-glow: rgba(0, 168, 255, 0.35);
+  
+  --alert-red: #ff3366;
+  --alert-red-glow: rgba(255, 51, 102, 0.4);
+  --alert-red-dim: rgba(255, 51, 102, 0.12);
+  
+  --warning-amber: #ffaa00;
+  --warning-amber-glow: rgba(255, 170, 0, 0.35);
+  --warning-amber-dim: rgba(255, 170, 0, 0.12);
+  
+  --matrix-green: #00ff66;
+  --matrix-green-glow: rgba(0, 255, 102, 0.35);
+  --matrix-green-dim: rgba(0, 255, 102, 0.12);
+  
+  --stealth-purple: #9d4edd;
+  --stealth-purple-glow: rgba(157, 78, 221, 0.35);
+  
+  /* Borders & Dividers */
+  --border-subtle: rgba(0, 255, 204, 0.15);
+  --border-active: rgba(0, 255, 204, 0.5);
+  --border-danger: rgba(255, 51, 102, 0.4);
+  --border-glass: rgba(255, 255, 255, 0.08);
+
+  /* Typography */
+  --font-display: 'Space Grotesk', 'Outfit', sans-serif;
+  --font-body: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Text Colors */
+  --text-primary: #f0f6fc;
+  --text-secondary: #8b9bb4;
+  --text-muted: #53627a;
+  --text-highlight: #ffffff;
+  
+  /* Shadows & Glows */
+  --glow-cyan-sm: 0 0 10px var(--neon-cyan-glow);
+  --glow-cyan-md: 0 0 20px var(--neon-cyan-glow), 0 0 40px rgba(0, 255, 204, 0.15);
+  --glow-red-md: 0 0 20px var(--alert-red-glow), 0 0 40px rgba(255, 51, 102, 0.15);
+  --shadow-hud: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+
+  /* Dimensions */
+  --sidebar-width: 260px;
+  --header-height: 72px;
+  --border-radius-sm: 6px;
+  --border-radius-md: 10px;
+  --border-radius-lg: 16px;
+  --transition-fast: 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   CSS Reset & Base Rules
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Futuristic background grid */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: 
+    linear-gradient(to right, rgba(0, 255, 204, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 255, 204, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Subtle ambient radial glow */
+body::after {
+  content: '';
+  position: fixed;
+  top: -20%;
+  right: -10%;
+  width: 60vw;
+  height: 60vw;
+  background: radial-gradient(circle, rgba(0, 168, 255, 0.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Monospace Helpers */
+.font-mono {
+  font-family: var(--font-mono) !important;
+}
+
+.font-display {
+  font-family: var(--font-display) !important;
+}
+
+/* ==========================================================================
+   Layout Containers
+   ========================================================================== */
+#app-root {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* Top Navigation Bar */
+.top-header {
+  position: fixed;
+  top: 0;
+  left: var(--sidebar-width);
+  right: 0;
+  height: var(--header-height);
+  background: rgba(8, 13, 22, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  z-index: 100;
+  transition: left var(--transition-smooth);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.brand-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-badge .cyber-pulse-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--neon-cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--neon-cyan);
+  animation: pulse-glow 2s infinite ease-in-out;
+}
+
+.header-title-group h1 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text-highlight);
+  text-transform: uppercase;
+}
+
+.header-title-group .sub-text {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--neon-cyan);
+  letter-spacing: 0.08em;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* DEFCON Indicator */
+.defcon-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-danger);
+  border-radius: var(--border-radius-sm);
+  padding: 6px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--alert-red);
+  box-shadow: 0 0 10px rgba(255, 51, 102, 0.2);
+}
+
+.defcon-pill .defcon-badge {
+  background: var(--alert-red);
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+/* User Profile & Auth Status */
+.user-status-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 4px 12px 4px 6px;
+}
+
+.user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--neon-cyan), var(--electric-blue));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #000;
+}
+
+.user-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-meta .name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.user-meta .role {
+  font-size: 0.68rem;
+  color: var(--neon-cyan);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   Sidebar Navigation
+   ========================================================================== */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: rgba(8, 12, 20, 0.95);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  z-index: 110;
+  transition: transform var(--transition-smooth);
+}
+
+.sidebar-logo {
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.sidebar-logo .shield-icon {
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, rgba(0, 255, 204, 0.2), rgba(0, 168, 255, 0.2));
+  border: 1px solid var(--neon-cyan);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--neon-cyan);
+  box-shadow: var(--glow-cyan-sm);
+}
+
+.sidebar-logo .logo-text {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  background: linear-gradient(90deg, #fff, var(--neon-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 20px 14px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nav-section-title {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  padding: 10px 12px 4px 12px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--border-radius-sm);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  border: 1px solid transparent;
+  position: relative;
+}
+
+.nav-item i {
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+}
+
+.nav-item:hover {
+  background: rgba(0, 255, 204, 0.06);
+  color: var(--text-highlight);
+  border-color: rgba(0, 255, 204, 0.2);
+}
+
+.nav-item:hover i {
+  color: var(--neon-cyan);
+}
+
+.nav-item.active {
+  background: linear-gradient(90deg, rgba(0, 255, 204, 0.15) 0%, rgba(0, 168, 255, 0.05) 100%);
+  color: var(--neon-cyan);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 255, 204, 0.12);
+  font-weight: 600;
+}
+
+.nav-item.active i {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 8px var(--neon-cyan);
+}
+
+.nav-item .nav-badge {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: var(--alert-red-dim);
+  color: var(--alert-red);
+  border: 1px solid var(--border-danger);
+}
+
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-subtle);
+  background: rgba(6, 9, 15, 0.8);
+}
+
+.system-health-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.system-health-bar .health-labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.health-track {
+  width: 100%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.health-fill {
+  width: 98.4%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--matrix-green), var(--neon-cyan));
+  box-shadow: 0 0 8px var(--matrix-green);
+}
+
+/* ==========================================================================
+   Main Content Views
+   ========================================================================== */
+.main-wrapper {
+  margin-left: var(--sidebar-width);
+  margin-top: var(--header-height);
+  flex: 1;
+  padding: 28px;
+  min-height: calc(100vh - var(--header-height));
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  max-width: calc(100vw - var(--sidebar-width));
+}
+
+.view-section {
+  display: none;
+  animation: fadeIn 0.35s ease forwards;
+}
+
+.view-section.active {
+  display: block;
+}
+
+/* View Header */
+.view-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.view-title-wrap h2 {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--text-highlight);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.view-title-wrap p {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  margin-top: 4px;
+}
+
+/* Cyber Button Styles */
+.cyber-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.cyber-btn:hover {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow: var(--glow-cyan-sm);
+  transform: translateY(-1px);
+}
+
+.cyber-btn-primary {
+  background: linear-gradient(135deg, rgba(0, 255, 204, 0.2) 0%, rgba(0, 168, 255, 0.25) 100%);
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
+}
+
+.cyber-btn-primary:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 204, 0.35) 0%, rgba(0, 168, 255, 0.4) 100%);
+  color: #fff;
+  box-shadow: var(--glow-cyan-md);
+}
+
+.cyber-btn-danger {
+  background: linear-gradient(135deg, rgba(255, 51, 102, 0.2) 0%, rgba(200, 20, 60, 0.25) 100%);
+  border-color: var(--alert-red);
+  color: var(--alert-red);
+  box-shadow: 0 0 15px rgba(255, 51, 102, 0.2);
+}
+
+.cyber-btn-danger:hover {
+  background: linear-gradient(135deg, rgba(255, 51, 102, 0.35) 0%, rgba(200, 20, 60, 0.4) 100%);
+  color: #fff;
+  box-shadow: var(--glow-red-md);
+}
+
+.cyber-btn-sm {
+  padding: 5px 12px;
+  font-size: 0.75rem;
+}
+
+/* ==========================================================================
+   Keyframe Animations
+   ========================================================================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 8px var(--neon-cyan);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.9);
+    box-shadow: 0 0 18px var(--neon-cyan);
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(1000%);
+  }
+}
+
+@keyframes radar-sweep {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(6, 9, 15, 0.8);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 204, 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neon-cyan);
+}

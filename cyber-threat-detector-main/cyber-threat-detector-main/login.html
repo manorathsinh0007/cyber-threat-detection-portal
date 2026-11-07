@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AEGIS Cyber Defense Command - Multi-Tier Operator Authentication & Security Portal">
+  <title>AEGIS // Cyber Threat Defense - Operator Authentication</title>
+
+  <!-- Modern Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/login.css">
+  <link rel="stylesheet" href="css/biometric-attacker.css">
+</head>
+<body>
+
+  <!-- Interactive Cyber Particle Canvas -->
+  <canvas id="cyber-canvas"></canvas>
+
+  <!-- Cyber Scanline Overlay -->
+  <div class="scanline-overlay"></div>
+
+  <!-- Centered Login Viewport -->
+  <div class="login-viewport">
+    <div class="login-terminal">
+
+      <!-- Terminal Header / Brand -->
+      <header class="terminal-brand">
+        <div class="brand-icon-wrap">
+          <i class="fas fa-shield-halved"></i>
+        </div>
+        <h1 class="terminal-title">AEGIS // CYBER COMMAND</h1>
+        <div class="terminal-subtitle">QUANTUM-RESISTANT NEURAL SOC PORTAL</div>
+      </header>
+
+      <!-- System Status Bar -->
+      <div class="system-status-bar">
+        <div class="status-node">
+          <span class="status-indicator-dot"></span>
+          <span>AUTH GATEWAY: ONLINE</span>
+        </div>
+        <div class="status-defcon">DEFCON 2 ACTIVE</div>
+        <div>NODE: SEC-ALPHA-01</div>
+      </div>
+
+      <!-- Authentication Alert / Error Banner -->
+      <div class="auth-alert-banner" id="auth-alert-banner">
+        <i class="fas fa-triangle-exclamation" style="color: var(--alert-red); font-size: 1.1rem;"></i>
+        <span id="auth-alert-text">Authentication failed. Please verify credentials.</span>
+      </div>
+
+      <!-- ======================================================================
+           STEP 1: PRIMARY CREDENTIAL, RAPID ROLE ACCESS, OR BIOMETRIC FINGERPRINT
+           ====================================================================== -->
+      <div id="step-initial-auth">
+        <!-- Auth Mode Tabs -->
+        <div class="auth-mode-tabs" style="grid-template-columns: repeat(3, 1fr);">
+          <button class="auth-tab-btn active" id="tab-btn-credentials" type="button">
+            <i class="fas fa-terminal"></i> Operator
+          </button>
+          <button class="auth-tab-btn" id="tab-btn-quick-roles" type="button">
+            <i class="fas fa-id-badge"></i> Rapid Access
+          </button>
+          <button class="auth-tab-btn" id="tab-btn-fingerprint" type="button" style="color: var(--neon-cyan);">
+            <i class="fas fa-fingerprint"></i> Biometric
+          </button>
+        </div>
+
+        <!-- Tab View 1: Standard Credential Form -->
+        <div id="view-credentials">
+          <form id="operator-login-form" autocomplete="off">
+            <!-- Username Input -->
+            <div class="auth-form-group">
+              <label class="auth-form-label" for="login-username">
+                <span>Operator Identifier</span>
+                <span style="color: var(--text-muted); font-size: 0.68rem;">Default: alex.vance</span>
+              </label>
+              <div class="input-with-icon">
+                <i class="fas fa-user-shield field-icon"></i>
+                <input class="cyber-input" id="login-username" type="text" placeholder="e.g. alex.vance" required value="alex.vance">
+              </div>
+            </div>
+
+            <!-- Password Input -->
+            <div class="auth-form-group">
+              <label class="auth-form-label" for="login-password">
+                <span>Security Passcode</span>
+                <span style="color: var(--text-muted); font-size: 0.68rem;">Default: analyst123</span>
+              </label>
+              <div class="input-with-icon">
+                <i class="fas fa-key field-icon"></i>
+                <input class="cyber-input" id="login-password" type="password" placeholder="Enter encrypted passcode" required value="analyst123">
+                <button class="password-toggle-btn" id="toggle-password-btn" type="button" title="Toggle password visibility">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+              <div class="password-strength-bar">
+                <div class="strength-step active-1 active-2 active-3" id="strength-1"></div>
+                <div class="strength-step active-2 active-3" id="strength-2"></div>
+                <div class="strength-step active-3" id="strength-3"></div>
+              </div>
+            </div>
+
+            <!-- Clearance Level Select -->
+            <div class="auth-form-group">
+              <label class="auth-form-label" for="login-clearance-role">
+                <span>Operational Clearance Level</span>
+              </label>
+              <select class="cyber-select" id="login-clearance-role">
+                <option value="analyst" selected>SOC Analyst (Tier-1) &bull; Level-2 Secret</option>
+                <option value="hunter">Senior Threat Hunter &bull; Level-4 Top Secret</option>
+                <option value="admin">CISO / SOC Director &bull; DEFCON-1 Full Executive</option>
+              </select>
+            </div>
+
+            <!-- Options Row -->
+            <div class="form-options-row">
+              <label class="cyber-checkbox-label">
+                <input type="checkbox" id="remember-identity" checked>
+                <span>Remember Operator Terminal</span>
+              </label>
+              <a class="forgot-pass-link" href="#" onclick="alert('DEMO CREDENTIALS:\n\n1. Analyst: alex.vance / analyst123\n2. Hunter: elena.rostova / hunter123\n3. CISO: marcus.vance / admin123\n\nOr use any username with passcode ≥ 4 characters.'); return false;">
+                Demo Credentials
+              </a>
+            </div>
+
+            <!-- Submit Button -->
+            <button class="cyber-btn cyber-btn-primary auth-submit-btn" type="submit" id="auth-submit-btn">
+              <i class="fas fa-lock-open"></i> Authenticate & Enter Command
+            </button>
+
+            <!-- Quick Fingerprint Login CTA -->
+            <button type="button" class="quick-fingerprint-cta" id="cta-quick-fingerprint">
+              <i class="fas fa-fingerprint" style="font-size: 1.1rem;"></i>
+              <span>Instant Optical Fingerprint / Biometric Bypass</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Tab View 2: Quick Pre-Authorized Role Access -->
+        <div id="view-quick-roles" style="display: none;">
+          <p style="font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-secondary); margin-bottom: 14px;">
+            Select a verified tactical operator profile for instant zero-friction simulation:
+          </p>
+          <div class="role-select-stack">
+            <!-- Analyst Role Card -->
+            <div class="quick-role-card" data-role="analyst">
+              <div class="role-card-left">
+                <div class="role-card-avatar cyan">AV</div>
+                <div class="role-card-meta">
+                  <div class="role-name">Alex Vance</div>
+                  <div class="role-title">SOC Analyst (Tier-1)</div>
+                  <div class="role-clearance">Clearance: Secret / Level-2</div>
+                </div>
+              </div>
+              <div class="role-card-action">
+                <i class="fas fa-arrow-right"></i>
+              </div>
+            </div>
+
+            <!-- Hunter Role Card -->
+            <div class="quick-role-card" data-role="hunter">
+              <div class="role-card-left">
+                <div class="role-card-avatar amber">ER</div>
+                <div class="role-card-meta">
+                  <div class="role-name">Elena Rostova</div>
+                  <div class="role-title">Senior Threat Hunter</div>
+                  <div class="role-clearance">Clearance: Top Secret / Level-4</div>
+                </div>
+              </div>
+              <div class="role-card-action">
+                <i class="fas fa-arrow-right"></i>
+              </div>
+            </div>
+
+            <!-- CISO Admin Role Card -->
+            <div class="quick-role-card" data-role="admin">
+              <div class="role-card-left">
+                <div class="role-card-avatar red">MV</div>
+                <div class="role-card-meta">
+                  <div class="role-name">Commander Marcus Vance</div>
+                  <div class="role-title">CISO / SOC Director</div>
+                  <div class="role-clearance">Clearance: DEFCON-1 Full Executive</div>
+                </div>
+              </div>
+              <div class="role-card-action">
+                <i class="fas fa-arrow-right"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab View 3: Dedicated Holographic Fingerprint & WebAuthn Login -->
+        <div id="view-fingerprint" style="display: none;">
+          <div class="biometric-auth-container">
+            <p style="font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-secondary); margin-bottom: 10px;">
+              Military-Grade FIDO2 / Biometric Dermal Assertion Interface
+            </p>
+
+            <!-- Operator Identity Target for Fingerprint Binding -->
+            <div class="auth-form-group" style="width: 100%; margin-bottom: 12px; text-align: left;">
+              <label class="auth-form-label" for="bio-target-operator">
+                <span>Select Operator Clearance to Verify</span>
+              </label>
+              <select class="cyber-select" id="bio-target-operator">
+                <option value="analyst" selected>Alex Vance &bull; SOC Analyst (Secret L-2)</option>
+                <option value="hunter">Elena Rostova &bull; Senior Threat Hunter (Top Secret L-4)</option>
+                <option value="admin">Commander Marcus Vance &bull; CISO Director (DEFCON-1)</option>
+              </select>
+            </div>
+
+            <!-- Holographic Interactive Fingerprint Sensor Pad -->
+            <div class="fingerprint-sensor-pad" id="fingerprint-sensor-pad" title="Click or Touch to Scan Fingerprint">
+              <div class="fingerprint-laser-scan"></div>
+              <i class="fas fa-fingerprint fingerprint-icon-svg"></i>
+            </div>
+
+            <!-- Sensor Live Status Banner -->
+            <div class="sensor-status-box">
+              <div class="sensor-status-main" id="bio-status-title">TOUCH OPTICAL SENSOR TO SCAN</div>
+              <div class="sensor-status-sub" id="bio-status-sub">500 DPI DERMAL SCANNER &bull; FIDO2 COMPLIANT</div>
+            </div>
+
+            <!-- Telemetry Metrics Stream -->
+            <div class="biometric-telemetry-pill">
+              <span>MINUTIAE: <strong id="bio-minutiae-val">READY</strong></span>
+              <span>LIVENESS: <strong id="bio-liveness-val">STANDBY</strong></span>
+              <span>FIDELITY: <strong id="bio-fidelity-val">--%</strong></span>
+            </div>
+
+            <!-- Primary Action Buttons -->
+            <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+              <button class="cyber-btn cyber-btn-primary" type="button" id="bio-scan-now-btn" style="width: 100%;">
+                <i class="fas fa-fingerprint"></i> Scan Fingerprint & Unlock SOC
+              </button>
+              
+              <button class="cyber-btn" type="button" id="bio-hardware-webauthn-btn" style="width: 100%; border-color: rgba(0, 255, 136, 0.4); color: var(--matrix-green); font-size: 0.74rem;">
+                <i class="fas fa-key"></i> Use Device Passkey (Touch ID / Windows Hello)
+              </button>
+            </div>
+
+            <!-- Fingerprint Profile Enrollment Toggle -->
+            <div style="margin-top: 14px; width: 100%;">
+              <a href="#" class="forgot-pass-link" id="toggle-enroll-link" style="font-size: 0.74rem;">
+                <i class="fas fa-id-card-clip"></i> Enroll Custom Operator Fingerprint Profile
+              </a>
+              
+              <!-- Hidden Enrollment Panel -->
+              <div class="enroll-biometric-box" id="enroll-biometric-panel" style="display: none;">
+                <div style="font-weight: 700; color: #fff; margin-bottom: 6px;">
+                  <i class="fas fa-user-plus" style="color: var(--neon-cyan);"></i> Enroll New Biometric Operator
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <input class="cyber-input" id="enroll-name-input" placeholder="Operator Full Name (e.g. Sarah Connor)" style="font-size: 0.78rem;">
+                  <input class="cyber-input" id="enroll-username-input" placeholder="Username (e.g. s.connor)" style="font-size: 0.78rem;">
+                  <select class="cyber-select" id="enroll-role-select" style="font-size: 0.78rem;">
+                    <option value="analyst">Analyst Clearance (Secret Level-2)</option>
+                    <option value="hunter">Threat Hunter Clearance (Top Secret Level-4)</option>
+                    <option value="admin">Executive Director Clearance (DEFCON-1)</option>
+                  </select>
+                  <button class="cyber-btn cyber-btn-sm cyber-btn-primary" type="button" id="save-enrollment-btn">
+                    <i class="fas fa-save"></i> Save & Bind Biometric Token
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================================
+           STEP 2: 2FA & BIOMETRIC CONFIRMATION SIMULATOR
+           ====================================================================== -->
+      <div id="step-2fa-verification" style="display: none;">
+        <!-- Biometric Scanner -->
+        <div class="biometric-scanner-box" id="step2-biometric-touch-target" style="cursor: pointer;" title="Click to instant-verify with Fingerprint">
+          <div class="scanner-ring">
+            <i class="fas fa-fingerprint"></i>
+            <div class="scanner-beam"></div>
+          </div>
+          <div style="font-family: var(--font-display); font-size: 1.15rem; color: #fff; font-weight: 700; margin-bottom: 4px;" id="mfa-target-name">
+            Alex Vance
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--neon-cyan);" id="mfa-target-role">
+            SOC Analyst (Tier-1) // Secret Level-2
+          </div>
+          <div style="margin-top: 8px; font-size: 0.68rem; color: var(--matrix-green); font-family: var(--font-mono);">
+            <i class="fas fa-hand-pointer"></i> TAP SCANNER FOR INSTANT BIOMETRIC BYPASS
+          </div>
+        </div>
+
+        <p style="font-size: 0.8rem; color: var(--text-secondary); text-align: center; margin-bottom: 16px;">
+          Cryptographic TOTP Multi-Factor Verification Required.
+        </p>
+
+        <form id="mfa-verify-form">
+          <div class="auth-form-group" style="margin-bottom: 12px;">
+            <input class="cyber-input font-mono" id="login-otp-input" style="font-size: 1.6rem; text-align: center; letter-spacing: 8px; font-weight: 700; color: var(--neon-cyan); height: 50px;" maxlength="6" value="784910" required>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 0.74rem;">
+            <a class="forgot-pass-link" href="#" id="mfa-regen-btn">
+              <i class="fas fa-rotate-right"></i> Generate New Token
+            </a>
+            <button class="cyber-btn cyber-btn-sm" type="button" id="mfa-back-btn" style="border: none; background: transparent; color: var(--text-muted);">
+              &larr; Switch User
+            </button>
+          </div>
+
+          <button class="cyber-btn cyber-btn-primary auth-submit-btn" type="submit" id="mfa-verify-submit-btn">
+            <i class="fas fa-shield-halved"></i> Verify Token & Enter SOC
+          </button>
+        </form>
+      </div>
+
+      <!-- ======================================================================
+           STEP 3: ACCESS GRANTED HUD TRANSITION
+           ====================================================================== -->
+      <div class="auth-success-hud" id="auth-success-hud">
+        <div class="hud-success-icon">
+          <i class="fas fa-check"></i>
+        </div>
+        <h2 style="font-family: var(--font-display); font-size: 1.4rem; color: #fff; margin-bottom: 6px;">
+          ACCESS AUTHORIZED // LEVEL GRANTED
+        </h2>
+        <p style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--matrix-green); margin-bottom: 14px;">
+          INITIALIZING SECURE SOC TELEMETRY PIPELINE...
+        </p>
+        <div style="width: 100%; height: 4px; background: rgba(0, 255, 102, 0.15); border-radius: 2px; overflow: hidden;">
+          <div style="width: 100%; height: 100%; background: var(--matrix-green); animation: scanline 1.2s ease-in-out infinite;"></div>
+        </div>
+      </div>
+
+      <!-- Terminal Footer & Zero-Trust Notice -->
+      <footer class="terminal-footer">
+        <div class="footer-badge">
+          <i class="fas fa-lock"></i> AES-256-GCM QUANTUM RESISTANT ENCRYPTION
+        </div>
+        <div style="margin-bottom: 8px;">
+          Zero-Trust Access Control &bull; Monitored & Audited under DoD Directive 8500.01E
+        </div>
+        <div style="font-size: 0.74rem;">
+          <a href="index.html#attacker" class="forgot-pass-link" style="color: var(--alert-red);">
+            <i class="fas fa-skull-crossbones"></i> Test Threat Detection with Mini Cyber Attacker
+          </a>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- Core Scripts -->
+  <script src="js/auth.js"></script>
+  <script src="js/biometric-auth.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>
